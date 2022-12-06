@@ -6,10 +6,7 @@ export default function RepoList({ userDataR, handleSetUserRepos }) {
           return (
             <div key={repo.id + repo.name}>
               <li key={repo.id}>{repo.name}</li>
-              <button
-                key={repo.name}
-                onClick={() => handleSetUserRepos(repo.name)}
-              >
+              <button key={repo.name} onClick={() => handleSetUserRepos(repo.name)}>
                 X
               </button>
             </div>

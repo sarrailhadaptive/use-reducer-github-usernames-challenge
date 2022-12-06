@@ -8,17 +8,17 @@ import { ACTIONS, gitReducer, initialState } from './reducer/reducer'
 export default function App() {
   const [userDataR, dispatch] = useReducer(gitReducer, initialState)
 
+  async function fetchRepos() {
+    const response = await fetch(`https://api.github.com/users/${userDataR.username}/repos`)
+    const repos = await response.json()
+    dispatch({ type: ACTIONS.SET_USER_REPOS, payload: repos })
+  }
+
   useEffect(() => {
-    if (userDataR.username !== '')
-      fetch(`https://api.github.com/users/${userDataR.username}/repos`)
-        .then(response => response.json())
-        .then(repos =>
-          dispatch({ type: ACTIONS.SET_USER_REPOS, payload: repos })
-        )
+    userDataR.username !== '' && fetchRepos()
   }, [userDataR.username])
 
-  const handleSetUserData = data =>
-    dispatch({ type: ACTIONS.SET_USER_DATA, payload: data })
+  const handleSetUserData = data => dispatch({ type: ACTIONS.SET_USER_DATA, payload: data })
 
   const handleSetUserRepos = repo => {
     dispatch({
@@ -28,7 +28,7 @@ export default function App() {
   }
 
   return (
-    <div className="App">
+    <div className='App'>
       <SearchBar handleSetUserData={handleSetUserData} />
       <Card userDataR={userDataR} />
       <RepoList userDataR={userDataR} handleSetUserRepos={handleSetUserRepos} />
